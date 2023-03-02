@@ -38,6 +38,30 @@ router.post('/', async (req, res) => {
 })
 
 
+router.get('/', async (req, res) => {
+    try {
+
+
+        const orders = await Order.find({});
+
+        return res.status(201).json({
+            status: 'success',
+            data: {
+                data: orders,
+            },
+        });
+
+
+    } catch (error) {
+        console.log("error", error)
+        return res.status(404).json({
+            status: false,
+            error
+        })
+    }
+})
+
+
 
 
 module.exports = router
