@@ -5,6 +5,7 @@ const Order = require('../models/orderModal')
 
 const {
     validateCreateorderPayload,
+    validateGetOrderbody
 } = require('../validation/order');
 
 router.post('/', async (req, res) => {
@@ -48,6 +49,28 @@ router.get('/', async (req, res) => {
             status: 'success',
             data: {
                 data: orders,
+            },
+        });
+
+
+    } catch (error) {
+        console.log("error", error)
+        return res.status(404).json({
+            status: false,
+            error
+        })
+    }
+})
+
+
+router.get('/:id', async (req, res) => {
+    try {
+        const order = await Order.find({ _id: req.params.id });
+
+        return res.status(201).json({
+            status: 'success',
+            data: {
+                data: order,
             },
         });
 
