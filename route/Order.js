@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
         console.log("error", error)
         return res.status(404).json({
             status: false,
-            error
+            error: error.message
         })
     }
 })
@@ -57,7 +57,7 @@ router.get('/', async (req, res) => {
         console.log("error", error)
         return res.status(404).json({
             status: false,
-            error
+            error: error.message
         })
     }
 })
@@ -79,7 +79,36 @@ router.get('/:id', async (req, res) => {
         console.log("error", error)
         return res.status(404).json({
             status: false,
-            error
+            error: error.message
+        })
+    }
+})
+
+
+router.delete('/:id', async (req, res) => {
+    try {
+        const order = await Order.find({ _id: req.params.id });
+
+
+        if (!order.length) {
+            return res.status(404).json({
+                status: false,
+                message: "No Order found With this ID"
+            })
+        }
+
+        await Order.findByIdAndDelete({ _id: req.params.id })
+
+        return res.status(201).json({
+            status: 'success',
+        });
+
+
+    } catch (error) {
+        console.log("error", error)
+        return res.status(404).json({
+            status: false,
+            error: error.message
         })
     }
 })
