@@ -114,6 +114,45 @@ router.delete('/:id', async (req, res) => {
 })
 
 
+router.put('/:id', async (req, res) => {
+    try {
+
+        const validBody = validateCreateorderPayload(req.body);
+
+        if (validBody.error) {
+            return res.status(400).json({
+                status: "failed",
+                message: validBody.error.details[0].message,
+            });
+        }
+
+        const order = await Order.find({ _id: req.params.id });
+
+
+        if (!order.length) {
+            return res.status(404).json({
+                status: false,
+                message: "No Order found With this ID"
+            })
+        }
+
+        await Order.findByIdAndUpdate(req.params.id, validBody.value)
+
+        return res.status(201).json({
+            status: 'success',
+        });
+
+
+    } catch (error) {
+        console.log("error", error)
+        return res.status(404).json({
+            status: false,
+            error: error.message
+        })
+    }
+})
+
+
 
 
 module.exports = router
